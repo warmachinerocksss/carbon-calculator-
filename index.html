@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transport Carbon Emissions & Tax Savings Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #27ae60;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #2ecc71;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #34495e;
+      text-align: center;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #7f8c8d;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Transport Carbon Savings Calculator</h1>
+    <label for="kms-driven">Average Kilometers Driven Per Year:</label>
+    <input type="number" id="kms-driven" placeholder="e.g., 100000" min="0" step="1">
+
+    <label for="fuel-efficiency">Vehicle Fuel Efficiency (Liters per 100km):</label>
+    <input type="number" id="fuel-efficiency" placeholder="e.g., 25" min="0" step="0.1">
+
+    <label for="carbon-emission-rate">Carbon Emission Rate (kg CO2 per Liter of Fuel):</label>
+    <input type="number" id="carbon-emission-rate" placeholder="e.g., 2.31" value="2.31" min="0" step="0.01">
+
+    <button onclick="calculateSavings()">Calculate Savings</button>
+
+    <div class="result" id="result"></div>
+    <div class="footer">
+      These savings can be achieved by optimized route planning through EcoAI.
+    </div>
+  </div>
+
+  <script>
+    function calculateSavings() {
+      // Fixed carbon tax rate
+      const carbonTaxRate = 65; // CAD per tonne of CO2
+
+      // Input values
+      const kmsDriven = parseFloat(document.getElementById('kms-driven').value);
+      const fuelEfficiency = parseFloat(document.getElementById('fuel-efficiency').value);
+      const carbonEmissionRate = parseFloat(document.getElementById('carbon-emission-rate').value);
+
+      // Validate inputs
+      if (isNaN(kmsDriven) || isNaN(fuelEfficiency) || isNaN(carbonEmissionRate)) {
+        document.getElementById('result').innerHTML = "Please fill in all fields with valid numbers.";
+        return;
+      }
+
+      // Calculate emissions before optimization
+      const litersConsumed = kmsDriven * (fuelEfficiency / 100);
+      const totalEmissions = litersConsumed * carbonEmissionRate; // in kg CO2
+      const totalEmissionsInTonnes = totalEmissions / 1000; // Convert to tonnes
+
+      // Calculate carbon tax
+      const carbonTax = totalEmissionsInTonnes * carbonTaxRate;
+
+      // Display results
+      document.getElementById('result').innerHTML = `
+        <strong>Results:</strong><br>
+        Total Carbon Emissions: ${totalEmissionsInTonnes.toFixed(2)} tonnes CO2<br>
+        Carbon Tax: CAD ${carbonTax.toFixed(2)}
+      `;
+    }
+  </script>
+</body>
+</html>
